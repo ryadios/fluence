@@ -42,3 +42,6 @@ next-env.d.ts
 
 # code editor
 .vscode/
+
+# prisma
+/src/generated/prisma
