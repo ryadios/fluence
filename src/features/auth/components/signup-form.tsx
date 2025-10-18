@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -29,7 +28,7 @@ import { authClient } from "@/lib/auth-client";
 const signupSchema = z
     .object({
         email: z.email("Please enter a valid email address"),
-        password: z.string().min(1, "Password is required"),
+        password: z.string().min(8, "Password must be 8 characters long"),
         confirmPassword: z.string(),
     })
     .refine((data) => data.password === data.confirmPassword, {
@@ -40,7 +39,6 @@ const signupSchema = z
 type SignupFormValues = z.infer<typeof signupSchema>;
 
 export function SignupForm() {
-    const router = useRouter();
     const form = useForm<SignupFormValues>({
         resolver: zodResolver(signupSchema),
         defaultValues: {
@@ -88,6 +86,12 @@ export function SignupForm() {
                                         type="button"
                                         disabled={isPending}
                                     >
+                                        <Image
+                                            alt="github"
+                                            src="/logos/github.svg"
+                                            width={20}
+                                            height={20}
+                                        />
                                         Continue with Github
                                     </Button>
                                     <Button
@@ -96,6 +100,12 @@ export function SignupForm() {
                                         type="button"
                                         disabled={isPending}
                                     >
+                                        <Image
+                                            alt="google"
+                                            src="/logos/google.svg"
+                                            width={20}
+                                            height={20}
+                                        />
                                         Continue with Google
                                     </Button>
                                 </div>

@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -34,7 +33,6 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
-    const router = useRouter();
     const form = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -64,7 +62,7 @@ export function LoginForm() {
         <div className="flex flex-col gap-6">
             <Card>
                 <CardHeader className="text-center">
-                    <CardTitle>Welcome back</CardTitle>
+                    <CardTitle>Welcome Back</CardTitle>
                     <CardDescription>Login to continue</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -78,6 +76,12 @@ export function LoginForm() {
                                         type="button"
                                         disabled={isPending}
                                     >
+                                        <Image
+                                            alt="github"
+                                            src="/logos/github.svg"
+                                            width={20}
+                                            height={20}
+                                        />
                                         Continue with Github
                                     </Button>
                                     <Button
@@ -86,6 +90,12 @@ export function LoginForm() {
                                         type="button"
                                         disabled={isPending}
                                     >
+                                        <Image
+                                            alt="google"
+                                            src="/logos/google.svg"
+                                            width={20}
+                                            height={20}
+                                        />
                                         Continue with Google
                                     </Button>
                                 </div>
@@ -127,6 +137,7 @@ export function LoginForm() {
                                         type="submit"
                                         className="w-full"
                                         disabled={isPending}
+                                        variant="default"
                                     >
                                         Login
                                     </Button>
