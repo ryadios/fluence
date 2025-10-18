@@ -10,6 +10,14 @@ export default function Home() {
     const trpc = useTRPC();
     const { data } = useQuery(trpc.getWorkflows.queryOptions());
 
+    const testAI = useMutation(
+        trpc.testAI.mutationOptions({
+            onSuccess: () => {
+                toast.success("AI job queued!");
+            },
+        })
+    );
+
     const create = useMutation(
         trpc.createWorkflow.mutationOptions({
             onSuccess: () => {
@@ -22,6 +30,9 @@ export default function Home() {
         <div className="min-h-screen min-w-screen flex flex-col items-center justify-center gap-y-6">
             <div>Protected Server Component</div>
             <div className="mx-32">{JSON.stringify(data, null, 2)}</div>
+            <Button onClick={() => testAI.mutate()} disabled={testAI.isPending}>
+                Test Google AI SDK
+            </Button>
             <Button onClick={() => create.mutate()} disabled={create.isPending}>
                 Create Workflow
             </Button>
