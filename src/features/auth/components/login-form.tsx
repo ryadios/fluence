@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import * as Sentry from "@sentry/nextjs";
 
 const loginSchema = z.object({
@@ -35,7 +35,7 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
-    const router = useRouter();
+    // const router = useRouter();
     const form = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -52,7 +52,7 @@ export function LoginForm() {
                 callbackURL: "/",
             },
             {
-                onSuccess: () => router.push("/"),
+                // onSuccess: () => router.push("/"),
                 onError: (ctx) => {
                     console.error("Login error:", ctx.error);
                     toast.error(ctx.error.message);
