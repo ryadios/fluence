@@ -132,11 +132,13 @@ export function EntityPagination({
     return (
         <div className="flex items-center justify-between gap-x-2 w-full">
             <div className="flex-1 text-sm text-muted-foreground">
-                Page {page} of {totalPages || 1}
+                {totalPages === 0
+                    ? "No results"
+                    : `Page ${page} of ${totalPages}`}
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
                 <Button
-                    disabled={page === 1 || disabled}
+                    disabled={page <= 1 || disabled}
                     variant="outline"
                     size="sm"
                     onClick={() => onPageChange(Math.max(1, page - 1))}
@@ -145,7 +147,7 @@ export function EntityPagination({
                 </Button>
                 <Button
                     disabled={
-                        page === totalPages || totalPages === 0 || disabled
+                        page >= totalPages || totalPages === 0 || disabled
                     }
                     variant="outline"
                     size="sm"
