@@ -5,7 +5,7 @@ import {
     premiumProcedure,
     protectedProcedure,
 } from "@/trpc/init";
-import z from "zod";
+import { z } from "zod";
 import { PAGINATION } from "@/config/constants";
 
 export const workflowsRouter = createTRPCRouter({
@@ -58,9 +58,10 @@ export const workflowsRouter = createTRPCRouter({
     getMany: protectedProcedure
         .input(
             z.object({
-                page: z.number().min(1).default(PAGINATION.DEFAULT_PAGE),
+                page: z.number().int().min(1).default(PAGINATION.DEFAULT_PAGE),
                 pageSize: z
                     .number()
+                    .int()
                     .min(PAGINATION.MIN_PAGE_SIZE)
                     .max(PAGINATION.MAX_PAGE_SIZE)
                     .default(PAGINATION.DEFAULT_PAGE_SIZE),
