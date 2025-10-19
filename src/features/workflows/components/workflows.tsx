@@ -5,7 +5,6 @@ import {
     useCreateWorkflow,
     useSuspenseWorkflows,
 } from "../hooks/use-workflows";
-import { err } from "inngest/types";
 import { useUpgradeModal } from "@/hooks/use-upgrade-modal";
 import { useRouter } from "next/navigation";
 

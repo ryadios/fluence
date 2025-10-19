@@ -15,7 +15,7 @@ type EntityHeaderProps = {
       }
     | {
           newButtonHref: string;
-          onNew?: () => never;
+          onNew?: never;
       }
     | {
           onNew?: never;
