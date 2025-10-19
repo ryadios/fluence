@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const signupSchema = z
     .object({
@@ -39,6 +40,7 @@ const signupSchema = z
 type SignupFormValues = z.infer<typeof signupSchema>;
 
 export function SignupForm() {
+    const router = useRouter();
     const form = useForm<SignupFormValues>({
         resolver: zodResolver(signupSchema),
         defaultValues: {
@@ -56,7 +58,9 @@ export function SignupForm() {
                 password: values.password,
                 callbackURL: "/",
             },
+
             {
+                onSuccess: () => router.push("/"),
                 onError: (ctx) => {
                     toast.error(ctx.error.message);
                 },
