@@ -104,25 +104,26 @@ model Node {
   outputConnections Connection[] @relation("FromNode")
   inputConnections  Connection[] @relation("ToNode")
 
-  worklowId String
-  workflow  Workflow @relation(fields: [worklowId], references: [id], onDelete: Cascade)
+  workflowId String
+  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
 }
 
 model Connection {
-  id         String   @id @default(cuid())
-  fromOutput String   @default("main")
-  toInput    String   @default("main")
-  createdAt  DateTime @default(now())
+  id         String @id @default(cuid())
+  fromOutput String @default("main")
+  toInput    String @default("main")
 
-  updatedAt  DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   fromNodeId String
-  fromNode   Node     @relation("FromNode", fields: [fromNodeId], references: [id], onDelete: Cascade)
+  fromNode   Node   @relation("FromNode", fields: [fromNodeId], references: [id], onDelete: Cascade)
 
   toNodeId String
   toNode   Node   @relation("ToNode", fields: [toNodeId], references: [id], onDelete: Cascade)
 
-  worklowId String
-  workflow  Workflow @relation(fields: [worklowId], references: [id], onDelete: Cascade)
+  workflowId String
+  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
 
   @@unique([fromNodeId, toNodeId, fromOutput, toInput])
 }
