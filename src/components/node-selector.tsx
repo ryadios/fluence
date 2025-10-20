@@ -131,7 +131,9 @@ export function NodeSelector({
                                         <Image
                                             src={Icon}
                                             alt={nodeType.label}
-                                            className="size-5 object-contain rounded-sm"
+                                            className="object-contain rounded-sm"
+                                            width={20}
+                                            height={20}
                                         />
                                     ) : (
                                         <Icon className="size-5" />
@@ -165,7 +167,9 @@ export function NodeSelector({
                                         <Image
                                             src={Icon}
                                             alt={nodeType.label}
-                                            className="size-5 object-contain rounded-sm"
+                                            className="object-contain rounded-sm"
+                                            width={20}
+                                            height={20}
                                         />
                                     ) : (
                                         <Icon className="size-5" />
