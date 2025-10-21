@@ -37,12 +37,12 @@ export const BaseExecutionNode = memo(
 
         const handleDelete = () => {
             setNodes((currentNodes) => {
-                return currentNodes.filter((node) => node.id != id);
+                return currentNodes.filter((node) => node.id !== id);
             });
 
             setEdges((currentEdges) => {
                 return currentEdges.filter(
-                    (edge) => edge.source != id && edge.target != id
+                    (edge) => edge.source != id && edge.target !== id
                 );
             });
         };

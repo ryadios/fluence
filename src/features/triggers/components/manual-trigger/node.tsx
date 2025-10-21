@@ -3,7 +3,7 @@
 import { NodeProps } from "@xyflow/react";
 import { memo, useState } from "react";
 import { BaseTriggerNode } from "../base-trigger-node";
-import { MousePointerIcon } from "lucide-react";
+import { MousePointerClickIcon } from "lucide-react";
 import { ManualTriggerDialog } from "./dialog";
 
 export const ManualTriggerNode = memo((props: NodeProps) => {
@@ -21,8 +21,8 @@ export const ManualTriggerNode = memo((props: NodeProps) => {
             />
             <BaseTriggerNode
                 {...props}
-                icon={MousePointerIcon}
-                name={"When clicking 'Execute Workflow'"}
+                icon={MousePointerClickIcon}
+                name={"Execute Workflow"}
                 status={nodeStatus}
                 onSettings={handleOpenSettings}
                 onDoubleClick={handleOpenSettings}
