@@ -3,7 +3,7 @@
 import { createId } from "@paralleldrive/cuid2";
 import { useReactFlow } from "@xyflow/react";
 
-import { GlobeIcon, MousePointerIcon } from "lucide-react";
+import { GlobeIcon, MousePointerClickIcon } from "lucide-react";
 import { useCallback } from "react";
 import { toast } from "sonner";
 import {
@@ -31,7 +31,7 @@ const triggerNodes: NodeTypeOption[] = [
         label: "Trigger manually",
         description:
             "Runs the flow on clicking the button. Good for getting started quickly",
-        icon: MousePointerIcon,
+        icon: MousePointerClickIcon,
     },
 ];
 
@@ -113,7 +113,8 @@ export function NodeSelector({
                 <SheetHeader>
                     <SheetTitle>What triggers this workflow?</SheetTitle>
                     <SheetDescription>
-                        A trigger is a step that starts your workflow
+                        Trigger nodes define how a workflow starts — such as
+                        manually or from an external event.
                     </SheetDescription>
                 </SheetHeader>
                 <div>
@@ -152,6 +153,13 @@ export function NodeSelector({
                     })}
                 </div>
                 <Separator />
+                <SheetHeader>
+                    <SheetTitle>Execution Nodes</SheetTitle>
+                    <SheetDescription>
+                        Execution nodes define what happens after a trigger —
+                        such as making API calls or running tasks.
+                    </SheetDescription>
+                </SheetHeader>
                 <div>
                     {executionNodes.map((nodeType) => {
                         const Icon = nodeType.icon;
