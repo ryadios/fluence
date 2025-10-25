@@ -68,8 +68,8 @@ export function LoginForm() {
                 provider,
                 callbackURL: "/",
             });
-        } catch (err) {
-            toast.error(`Failed to login: ${err}`);
+        } catch {
+            toast.error(`Failed to login!`);
         } finally {
             setIsOauthPending(false);
         }
