@@ -10,12 +10,11 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
                     className="flex items-center gap-4 self-center font-medium text-3xl"
                 >
                     <Image
-                        alt="nodebase"
+                        alt="fluence"
                         src="/logos/logo.svg"
-                        width={40}
-                        height={40}
+                        width={150}
+                        height={150}
                     />
-                    Nodebase
                 </Link>
                 {children}
             </div>

@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
 import { useHasActiveSubscription } from "@/features/subscriptions/hooks/use-subscription";
+import { inter } from "@/lib/font";
 
 const menuItems = [
     {
@@ -60,13 +61,15 @@ export function AppSidebar() {
                     <SidebarMenuButton asChild className="gap-x-4 h-10 px-4">
                         <Link href="/workflows" prefetch>
                             <Image
-                                alt="nodebase"
-                                src={"/logos/logo.svg"}
+                                alt="fluence"
+                                src={"/logos/logo-icon.svg"}
                                 width={30}
                                 height={30}
                             />
-                            <span className="font-semibold text-sm">
-                                Nodebase
+                            <span
+                                className={`font-semibold ${inter.variable} text-sm`}
+                            >
+                                Fluence
                             </span>
                         </Link>
                     </SidebarMenuButton>
