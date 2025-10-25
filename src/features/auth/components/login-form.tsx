@@ -24,8 +24,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
-// import { useRouter } from "next/navigation";
-import * as Sentry from "@sentry/nextjs";
+import { useState } from "react";
 
 const loginSchema = z.object({
     email: z.email("Please enter a valid email address"),
@@ -35,7 +34,6 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
-    // const router = useRouter();
     const form = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -43,6 +41,8 @@ export function LoginForm() {
             password: "",
         },
     });
+
+    const [isOauthPending, setIsOauthPending] = useState(false);
 
     const onSubmit = async (values: LoginFormValues) => {
         await authClient.signIn.email(
@@ -56,23 +56,26 @@ export function LoginForm() {
                 onError: (ctx) => {
                     console.error("Login error:", ctx.error);
                     toast.error(ctx.error.message);
-
-                    Sentry.captureMessage("Login failed", {
-                        level: "error",
-                        extra: {
-                            log_source: "login_form",
-                            error_message: ctx.error.message,
-                            error_code: ctx.error.code,
-                            email: values.email,
-                            timestamp: new Date().toISOString(),
-                        },
-                    });
                 },
             }
         );
     };
 
-    const isPending = form.formState.isSubmitting;
+    const handleOAuth = async (provider: "google" | "github") => {
+        setIsOauthPending(true);
+        try {
+            await authClient.signIn.social({
+                provider,
+                callbackURL: "/",
+            });
+        } catch (err) {
+            toast.error(`Failed to login: ${err}`);
+        } finally {
+            setIsOauthPending(false);
+        }
+    };
+
+    const isPending = form.formState.isSubmitting || isOauthPending;
 
     return (
         <div className="flex flex-col gap-6">
@@ -90,6 +93,7 @@ export function LoginForm() {
                                         variant="outline"
                                         className="w-full"
                                         type="button"
+                                        onClick={() => handleOAuth("github")}
                                         disabled={isPending}
                                     >
                                         <Image
@@ -104,6 +108,7 @@ export function LoginForm() {
                                         variant="outline"
                                         className="w-full"
                                         type="button"
+                                        onClick={() => handleOAuth("google")}
                                         disabled={isPending}
                                     >
                                         <Image

@@ -12,6 +12,13 @@ export const auth = betterAuth({
         enabled: true,
         autoSignIn: true, // auto login when signup
     },
+    socialProviders: {
+        google: {
+            prompt: "select_account",
+            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+        },
+    },
     plugins: [
         polar({
             client: polarClient,
