@@ -6,9 +6,12 @@ import { NodeType } from "@/generated/prisma";
 import { getExecutor } from "@/features/executions/lib/executor-registry";
 
 export const executeWorkflow = inngest.createFunction(
-    { id: "execute-workflow" },
+    {
+        id: "execute-workflow",
+        retries: 0, // TODO: Remove in production
+    },
     { event: "workflows/execute.workflow" },
-    async ({ event, step }) => {
+    async ({ event, step, publish }) => {
         const workflowId = event.data.workflowId;
 
         if (!workflowId) throw new NonRetriableError("Workflow ID is missing");
@@ -33,6 +36,7 @@ export const executeWorkflow = inngest.createFunction(
                 nodeId: node.id,
                 context,
                 step,
+                publish,
             });
         }
 
