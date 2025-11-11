@@ -41,7 +41,7 @@ const formSchema = z.object({
         .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
             error: "Variable name must start with a letter or underscore and only contain letters, numbers and underscores",
         }),
-    endpoint: z.url({ error: "Please enter a valid URL" }),
+    endpoint: z.string().min(1, { error: "Please enter a valid URL" }),
     method: z.enum(HTTP_METHODS),
     body: z.string().optional(),
     // .refine(), TODO
