@@ -8,7 +8,7 @@ export const topologicalSort = (
     // No connections = no sorting required
     if (connections.length === 0) return nodes;
 
-    // Create edges arary for toposort
+    // Create edges array for toposort
     const edges: [string, string][] = connections.map((connection) => [
         connection.fromNodeId,
         connection.toNodeId,
