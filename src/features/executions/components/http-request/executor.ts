@@ -51,7 +51,9 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
         const options: KyOptions = { method };
 
         if (["POST", "PUT", "PATCH"].includes(method)) {
-            const resolved = HandleBars.compile(data.body || "{}")(context);
+            const resolved = HandleBars.compile(data.body || "{}", {
+                noEscape: true,
+            })(context);
             JSON.parse(resolved);
             options.body = resolved;
             options.headers = {
