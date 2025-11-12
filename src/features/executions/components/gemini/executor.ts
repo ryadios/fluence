@@ -43,7 +43,7 @@ export const geminiExecutor: NodeExecutor<GeminiData> = async ({
 
     const systemPrompt = data.systemPrompt
         ? HandleBars.compile(data.systemPrompt)(context)
-        : "You are an helpful assistant";
+        : "You are a helpful assistant";
     const userPrompt = HandleBars.compile(data.userPrompt)(context);
 
     // TODO: Fetch credential that user selected

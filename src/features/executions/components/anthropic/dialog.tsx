@@ -178,7 +178,7 @@ export function AnthropicDialog({
                                     <FormControl>
                                         <Textarea
                                             className="min-h-[80px] font-mono text-sm"
-                                            placeholder="You are an helpful assistant"
+                                            placeholder="You are a helpful assistant"
                                             {...field}
                                         />
                                     </FormControl>
