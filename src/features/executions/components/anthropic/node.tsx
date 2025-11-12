@@ -3,17 +3,14 @@
 import { useReactFlow, type Node, type NodeProps } from "@xyflow/react";
 import { memo, useState } from "react";
 import { BaseExecutionNode } from "../base-execution-node";
-import {
-    AnthropicDialog,
-    AnthropicFormValues,
-    AVAILABLE_MODELS,
-} from "./dialog";
+import { AnthropicDialog, AnthropicFormValues, AVAILABLE_MODELS } from "./dialog";
 import { useNodeStatus } from "../../hooks/use-node-status";
 import { ANTHROPIC_CHANNEL_NAME } from "@/inngest/channels/anthropic";
 import { fetchAnthropicRealtimeToken } from "./actions";
 
 type AnthropicNodeData = {
     variableName?: string;
+    credentialId?: string;
     model?: (typeof AVAILABLE_MODELS)[number];
     systemPrompt?: string;
     userPrompt?: string;
@@ -52,9 +49,7 @@ export const AnthropicNode = memo((props: NodeProps<AnthropicNodeType>) => {
 
     const nodeData = props.data;
     const description = nodeData?.userPrompt
-        ? `${
-              nodeData.model || AVAILABLE_MODELS[0]
-          }: ${nodeData.userPrompt.slice(0, 50)}...`
+        ? `${nodeData.model || AVAILABLE_MODELS[0]}: ${nodeData.userPrompt.slice(0, 50)}...`
         : "Not configured";
 
     return (
