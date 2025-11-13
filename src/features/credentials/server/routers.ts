@@ -1,12 +1,9 @@
 import prisma from "@/lib/db";
-import {
-    createTRPCRouter,
-    premiumProcedure,
-    protectedProcedure,
-} from "@/trpc/init";
+import { createTRPCRouter, premiumProcedure, protectedProcedure } from "@/trpc/init";
 import { z } from "zod";
 import { PAGINATION } from "@/config/constants";
 import { CredentialType } from "@/generated/prisma";
+import { encrypt } from "@/lib/encryption";
 
 export const credentialsRouter = createTRPCRouter({
     create: premiumProcedure
@@ -25,20 +22,18 @@ export const credentialsRouter = createTRPCRouter({
                     name,
                     userId: ctx.auth.user.id,
                     type,
-                    value, // TODO: Consider encrypting in production
+                    value: encrypt(value),
                 },
             });
         }),
-    remove: protectedProcedure
-        .input(z.object({ id: z.string() }))
-        .mutation(({ ctx, input }) => {
-            return prisma.credential.delete({
-                where: {
-                    id: input.id,
-                    userId: ctx.auth.user.id,
-                },
-            });
-        }),
+    remove: protectedProcedure.input(z.object({ id: z.string() })).mutation(({ ctx, input }) => {
+        return prisma.credential.delete({
+            where: {
+                id: input.id,
+                userId: ctx.auth.user.id,
+            },
+        });
+    }),
     update: protectedProcedure
         .input(
             z.object({
@@ -56,17 +51,15 @@ export const credentialsRouter = createTRPCRouter({
                 data: {
                     name,
                     type,
-                    value, // TODO: Consider encrypting in production
+                    value: encrypt(value),
                 },
             });
         }),
-    getOne: protectedProcedure
-        .input(z.object({ id: z.string() }))
-        .query(({ ctx, input }) => {
-            return prisma.credential.findUniqueOrThrow({
-                where: { id: input.id, userId: ctx.auth.user.id },
-            });
-        }),
+    getOne: protectedProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
+        return prisma.credential.findUniqueOrThrow({
+            where: { id: input.id, userId: ctx.auth.user.id },
+        });
+    }),
     getMany: protectedProcedure
         .input(
             z.object({

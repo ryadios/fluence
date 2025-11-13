@@ -8,23 +8,9 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -44,7 +30,6 @@ const formSchema = z.object({
     endpoint: z.string().min(1, { error: "Please enter a valid URL" }),
     method: z.enum(HTTP_METHODS),
     body: z.string().optional(),
-    // .refine(), TODO
 });
 
 export type HttpRequestFormValues = z.infer<typeof formSchema>;
@@ -56,12 +41,7 @@ interface Props {
     defaultValues?: Partial<HttpRequestFormValues>;
 }
 
-export function HttpRequestDialog({
-    open,
-    onOpenChange,
-    onSubmit,
-    defaultValues = {},
-}: Props) {
+export function HttpRequestDialog({ open, onOpenChange, onSubmit, defaultValues = {} }: Props) {
     const form = useForm<HttpRequestFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -98,15 +78,10 @@ export function HttpRequestDialog({
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>HTTP Request</DialogTitle>
-                    <DialogDescription>
-                        Configure the settings for HTTP Request node.
-                    </DialogDescription>
+                    <DialogDescription>Configure the settings for HTTP Request node.</DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
-                    <form
-                        onSubmit={form.handleSubmit(handleSubmit)}
-                        className="space-y-8 mt-4"
-                    >
+                    <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 mt-4">
                         <FormField
                             control={form.control}
                             name="variableName"
@@ -117,8 +92,7 @@ export function HttpRequestDialog({
                                         <Input placeholder="myAPI" {...field} />
                                     </FormControl>
                                     <FormDescription>
-                                        Use this name to reference the result in
-                                        other nodes:{" "}
+                                        Use this name to reference the result in other nodes:{" "}
                                         {`{{${watchVariableName}.httpResponse.data}}`}
                                     </FormDescription>
                                     <FormMessage />
@@ -131,31 +105,21 @@ export function HttpRequestDialog({
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Method</FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                    >
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                                         <FormControl>
                                             <SelectTrigger className="w-full">
                                                 <SelectValue placeholder="Select a method" />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {HTTP_METHODS.map(
-                                                (method, index) => (
-                                                    <SelectItem
-                                                        key={index}
-                                                        value={method}
-                                                    >
-                                                        {method}
-                                                    </SelectItem>
-                                                )
-                                            )}
+                                            {HTTP_METHODS.map((method, index) => (
+                                                <SelectItem key={index} value={method}>
+                                                    {method}
+                                                </SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
-                                    <FormDescription>
-                                        The HTTP method to use for this request
-                                    </FormDescription>
+                                    <FormDescription>The HTTP method to use for this request</FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -173,8 +137,7 @@ export function HttpRequestDialog({
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        Static URL or use {"{{variables}}"} for
-                                        simple values or {"{{json variable}}"}{" "}
+                                        Static URL or use {"{{variables}}"} for simple values or {"{{json variable}}"}{" "}
                                         to stringify objects
                                     </FormDescription>
                                     <FormMessage />
@@ -198,10 +161,8 @@ export function HttpRequestDialog({
                                             />
                                         </FormControl>
                                         <FormDescription>
-                                            JSON with template variables. Use{" "}
-                                            {"{{variables}}"} for simple values
-                                            or {"{{json variable}}"} to
-                                            stringify objects
+                                            JSON with template variables. Use {"{{variables}}"} for simple values or{" "}
+                                            {"{{json variable}}"} to stringify objects
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
