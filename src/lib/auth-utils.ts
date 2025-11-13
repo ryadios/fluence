@@ -7,9 +7,6 @@ export const requireAuth = async () => {
         headers: await headers(),
     });
 
-    console.log("Checking your session....");
-
-    console.log(session);
     if (!session) redirect("/login");
     return session;
 };
