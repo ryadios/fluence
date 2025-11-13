@@ -7,24 +7,12 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
     email: z.email("Please enter a valid email address"),
@@ -34,6 +22,7 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
+    const router = useRouter();
     const form = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -64,10 +53,17 @@ export function LoginForm() {
     const handleOAuth = async (provider: "google" | "github") => {
         setIsOauthPending(true);
         try {
-            await authClient.signIn.social({
-                provider,
-                callbackURL: "/",
-            });
+            await authClient.signIn.social(
+                {
+                    provider,
+                    callbackURL: "/",
+                },
+                {
+                    onError: () => {
+                        toast.error("Something went wrong!");
+                    },
+                }
+            );
         } catch {
             toast.error(`Failed to login!`);
         } finally {
@@ -96,12 +92,7 @@ export function LoginForm() {
                                         onClick={() => handleOAuth("github")}
                                         disabled={isPending}
                                     >
-                                        <Image
-                                            alt="github"
-                                            src="/logos/github.svg"
-                                            width={20}
-                                            height={20}
-                                        />
+                                        <Image alt="github" src="/logos/github.svg" width={20} height={20} />
                                         Continue with Github
                                     </Button>
                                     <Button
@@ -111,12 +102,7 @@ export function LoginForm() {
                                         onClick={() => handleOAuth("google")}
                                         disabled={isPending}
                                     >
-                                        <Image
-                                            alt="google"
-                                            src="/logos/google.svg"
-                                            width={20}
-                                            height={20}
-                                        />
+                                        <Image alt="google" src="/logos/google.svg" width={20} height={20} />
                                         Continue with Google
                                     </Button>
                                 </div>
@@ -145,30 +131,19 @@ export function LoginForm() {
                                             <FormItem>
                                                 <FormLabel>Password</FormLabel>
                                                 <FormControl>
-                                                    <Input
-                                                        type="password"
-                                                        {...field}
-                                                    />
+                                                    <Input type="password" {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
                                     />
-                                    <Button
-                                        type="submit"
-                                        className="w-full"
-                                        disabled={isPending}
-                                        variant="default"
-                                    >
+                                    <Button type="submit" className="w-full" disabled={isPending} variant="default">
                                         Login
                                     </Button>
                                 </div>
                                 <div className="text-center text-sm">
                                     Don&apos;t have an account?{" "}
-                                    <Link
-                                        href="/signup"
-                                        className="underline underline-offset-4"
-                                    >
+                                    <Link href="/signup" className="underline underline-offset-4">
                                         Sign Up
                                     </Link>
                                 </div>

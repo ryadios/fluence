@@ -7,24 +7,12 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const signupSchema = z
     .object({
@@ -50,6 +38,8 @@ export function SignupForm() {
         },
     });
 
+    const [isOauthPending, setIsOauthPending] = useState(false);
+
     const onSubmit = async (values: SignupFormValues) => {
         await authClient.signUp.email(
             {
@@ -60,6 +50,7 @@ export function SignupForm() {
             },
 
             {
+                // required since better-auth signup callback isn't working
                 onSuccess: () => router.push("/"),
                 onError: (ctx) => {
                     toast.error(ctx.error.message);
@@ -68,16 +59,35 @@ export function SignupForm() {
         );
     };
 
-    const isPending = form.formState.isSubmitting;
+    const handleOAuth = async (provider: "google" | "github") => {
+        setIsOauthPending(true);
+        try {
+            await authClient.signIn.social(
+                {
+                    provider,
+                    callbackURL: "/",
+                },
+                {
+                    onError: () => {
+                        toast.error("Something went wrong!");
+                    },
+                }
+            );
+        } catch {
+            toast.error(`Failed to login!`);
+        } finally {
+            setIsOauthPending(false);
+        }
+    };
+
+    const isPending = form.formState.isSubmitting || isOauthPending;
 
     return (
         <div className="flex flex-col gap-6">
             <Card>
                 <CardHeader className="text-center">
                     <CardTitle>Get Started</CardTitle>
-                    <CardDescription>
-                        Create your account to get started
-                    </CardDescription>
+                    <CardDescription>Create your account to get started</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
@@ -88,28 +98,20 @@ export function SignupForm() {
                                         variant="outline"
                                         className="w-full"
                                         type="button"
+                                        onClick={() => handleOAuth("github")}
                                         disabled={isPending}
                                     >
-                                        <Image
-                                            alt="github"
-                                            src="/logos/github.svg"
-                                            width={20}
-                                            height={20}
-                                        />
+                                        <Image alt="github" src="/logos/github.svg" width={20} height={20} />
                                         Continue with Github
                                     </Button>
                                     <Button
                                         variant="outline"
                                         className="w-full"
                                         type="button"
+                                        onClick={() => handleOAuth("google")}
                                         disabled={isPending}
                                     >
-                                        <Image
-                                            alt="google"
-                                            src="/logos/google.svg"
-                                            width={20}
-                                            height={20}
-                                        />
+                                        <Image alt="google" src="/logos/google.svg" width={20} height={20} />
                                         Continue with Google
                                     </Button>
                                 </div>
@@ -138,10 +140,7 @@ export function SignupForm() {
                                             <FormItem>
                                                 <FormLabel>Password</FormLabel>
                                                 <FormControl>
-                                                    <Input
-                                                        type="password"
-                                                        {...field}
-                                                    />
+                                                    <Input type="password" {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -152,33 +151,21 @@ export function SignupForm() {
                                         name="confirmPassword"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>
-                                                    Confirm Password
-                                                </FormLabel>
+                                                <FormLabel>Confirm Password</FormLabel>
                                                 <FormControl>
-                                                    <Input
-                                                        type="password"
-                                                        {...field}
-                                                    />
+                                                    <Input type="password" {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
                                     />
-                                    <Button
-                                        type="submit"
-                                        className="w-full"
-                                        disabled={isPending}
-                                    >
+                                    <Button type="submit" className="w-full" disabled={isPending}>
                                         Sign Up
                                     </Button>
                                 </div>
                                 <div className="text-center text-sm">
                                     Already have an account?{" "}
-                                    <Link
-                                        href="/login"
-                                        className="underline underline-offset-4"
-                                    >
+                                    <Link href="/login" className="underline underline-offset-4">
                                         Login
                                     </Link>
                                 </div>
