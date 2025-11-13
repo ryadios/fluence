@@ -22,7 +22,7 @@ type OpenAiData = {
     userPrompt?: string;
 };
 
-export const openAiExecutor: NodeExecutor<OpenAiData> = async ({ data, nodeId, context, step, publish }) => {
+export const openAiExecutor: NodeExecutor<OpenAiData> = async ({ data, nodeId, userId, context, step, publish }) => {
     await publish(openAiChannel().status({ nodeId, status: "loading" }));
 
     if (!data.variableName) {
@@ -49,11 +49,15 @@ export const openAiExecutor: NodeExecutor<OpenAiData> = async ({ data, nodeId, c
         return prisma.credential.findUnique({
             where: {
                 id: data.credentialId,
+                userId,
             },
         });
     });
 
-    if (!credential) throw new NonRetriableError("OpenAI Node: credential not found");
+    if (!credential) {
+        await publish(openAiChannel().status({ nodeId, status: "error" }));
+        throw new NonRetriableError("OpenAI Node: credential not found");
+    }
 
     const openai = createOpenAI({
         apiKey: credential.value,
