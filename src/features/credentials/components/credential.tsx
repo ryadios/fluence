@@ -96,7 +96,7 @@ export const CredentialForm = ({ initialData }: CredentialFormProps) => {
                             ? "Update your API key or credential details"
                             : "Add a new API key or credential to your account"}
                     </CardDescription>
-                    <CardContent>
+                    <CardContent className="px-0">
                         <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                                 <FormField
