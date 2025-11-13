@@ -6,14 +6,7 @@ import { useReactFlow } from "@xyflow/react";
 import { GlobeIcon, MousePointerClickIcon } from "lucide-react";
 import { useCallback } from "react";
 import { toast } from "sonner";
-import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from "./ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
 import { NodeType } from "@/generated/prisma";
 import { Separator } from "./ui/separator";
 import Image from "next/image";
@@ -29,8 +22,7 @@ const triggerNodes: NodeTypeOption[] = [
     {
         type: NodeType.MANUAL_TRIGGER,
         label: "Trigger manually",
-        description:
-            "Runs the flow on clicking the button. Good for getting started quickly",
+        description: "Runs the flow on clicking the button. Good for getting started quickly",
         icon: MousePointerClickIcon,
     },
     {
@@ -72,6 +64,18 @@ const executionNodes: NodeTypeOption[] = [
         description: "Use Anthropic to generate text",
         icon: "/logos/anthropic.svg",
     },
+    {
+        type: NodeType.DISCORD,
+        label: "Discord",
+        description: "Send a message to discord",
+        icon: "/logos/discord.svg",
+    },
+    {
+        type: NodeType.SLACK,
+        label: "Slack",
+        description: "Send a message to slack",
+        icon: "/logos/slack.svg",
+    },
 ];
 
 interface NodeSelectorProps {
@@ -80,11 +84,7 @@ interface NodeSelectorProps {
     children: React.ReactNode;
 }
 
-export function NodeSelector({
-    open,
-    onOpenChange,
-    children,
-}: NodeSelectorProps) {
+export function NodeSelector({ open, onOpenChange, children }: NodeSelectorProps) {
     const { setNodes, getNodes, screenToFlowPosition } = useReactFlow();
 
     const handleNodeSelect = useCallback(
@@ -92,22 +92,16 @@ export function NodeSelector({
             // Check if trying to add a manual trigger when already one exists
             if (selection.type === NodeType.MANUAL_TRIGGER) {
                 const nodes = getNodes();
-                const hasManualTrigger = nodes.some(
-                    (node) => node.type === NodeType.MANUAL_TRIGGER
-                );
+                const hasManualTrigger = nodes.some((node) => node.type === NodeType.MANUAL_TRIGGER);
 
                 if (hasManualTrigger) {
-                    toast.error(
-                        "Only one manual trigger is allowed per workflow"
-                    );
+                    toast.error("Only one manual trigger is allowed per workflow");
                     return;
                 }
             }
 
             setNodes((nodes) => {
-                const hasInitialTrigger = nodes.some(
-                    (node) => node.type === NodeType.INITIAL
-                );
+                const hasInitialTrigger = nodes.some((node) => node.type === NodeType.INITIAL);
 
                 const centerX = window.innerWidth / 2;
                 const centerY = window.innerHeight / 2;
@@ -136,15 +130,11 @@ export function NodeSelector({
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetTrigger asChild>{children}</SheetTrigger>
-            <SheetContent
-                side="right"
-                className="w-full sm:max-w-md overflow-y-auto"
-            >
+            <SheetContent side="right" className="w-full sm:max-w-md overflow-y-auto">
                 <SheetHeader>
                     <SheetTitle>What triggers this workflow?</SheetTitle>
                     <SheetDescription>
-                        Trigger nodes define how a workflow starts — such as
-                        manually or from an external event.
+                        Trigger nodes define how a workflow starts — such as manually or from an external event.
                     </SheetDescription>
                 </SheetHeader>
                 <div>
@@ -170,12 +160,8 @@ export function NodeSelector({
                                         <Icon className="size-5" />
                                     )}
                                     <div className="flex flex-col items-start text-left">
-                                        <span className="font-medium text-sm">
-                                            {nodeType.label}
-                                        </span>
-                                        <span className="text-xs text-muted-foreground">
-                                            {nodeType.description}
-                                        </span>
+                                        <span className="font-medium text-sm">{nodeType.label}</span>
+                                        <span className="text-xs text-muted-foreground">{nodeType.description}</span>
                                     </div>
                                 </div>
                             </div>
@@ -186,8 +172,7 @@ export function NodeSelector({
                 <SheetHeader>
                     <SheetTitle>Execution Nodes</SheetTitle>
                     <SheetDescription>
-                        Execution nodes define what happens after a trigger —
-                        such as making API calls or running tasks.
+                        Execution nodes define what happens after a trigger — such as making API calls or running tasks.
                     </SheetDescription>
                 </SheetHeader>
                 <div>
@@ -213,12 +198,8 @@ export function NodeSelector({
                                         <Icon className="size-5" />
                                     )}
                                     <div className="flex flex-col items-start text-left">
-                                        <span className="font-medium text-sm">
-                                            {nodeType.label}
-                                        </span>
-                                        <span className="text-xs text-muted-foreground">
-                                            {nodeType.description}
-                                        </span>
+                                        <span className="font-medium text-sm">{nodeType.label}</span>
+                                        <span className="text-xs text-muted-foreground">{nodeType.description}</span>
                                     </div>
                                 </div>
                             </div>
