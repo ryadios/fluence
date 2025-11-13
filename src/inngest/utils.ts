@@ -44,6 +44,7 @@ export const topologicalSort = (nodes: Node[], connections: Connection[]): Node[
     return sortedNodeIds.map((id) => nodeMap.get(id)!).filter(Boolean);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const sendWorkflowExecution = async (data: { workflowId: string; [key: string]: any }) => {
     return inngest.send({
         name: "workflows/execute.workflow",
